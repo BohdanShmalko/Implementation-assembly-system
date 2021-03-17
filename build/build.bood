@@ -1,10 +1,6 @@
-go_binary {
-  // Module (and output) name.
-  name: "bood",
-
-  // Go package to build.
+go_testedbinary {
+  name: "FinalBood.exe",
   pkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/cmd/bood",
-
-  // Build inputs.
+  testPkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule",
   srcs: ["**/*.go", "../go.mod"]
 }
