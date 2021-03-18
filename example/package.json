@@ -1,0 +1,29 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "js_bundle example",
+  "main": "mainScript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BohdanShmalko/Implementation-assembly-system.git"
+  },
+  "keywords": [
+    "js",
+    "bundle",
+    "webpack"
+  ],
+  "author": "dwoescanoe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BohdanShmalko/Implementation-assembly-system/issues"
+  },
+  "homepage": "https://github.com/BohdanShmalko/Implementation-assembly-system#readme",
+  "devDependencies": {
+    "javascript-obfuscator": "^2.11.0",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0"
+  }
+}

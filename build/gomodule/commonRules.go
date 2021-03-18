@@ -8,25 +8,30 @@ import (
 var (
 	pctx = blueprint.NewPackageContext("github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule")
 
-	goBuild, goVendor, goTest blueprint.Rule
+	goBuild, goVendor, goTest, jsBundle blueprint.Rule
 )
 
 func setOSRulesTestBinary() {
-	var buildCmd, vendorCmd, testCmd string
+	var buildCmd, vendorCmd, testCmd, bundleCmd string
 	os := runtime.GOOS
+	//npx webpack ./mainScript.js ./script1.js -o ./out/js && cd ./out/js && rena
+	//me main.js result.js && if "true"=="true" npx javascript-obfuscator result.js --output result.js
 	switch os {
 	case "windows":
 		buildCmd = "cmd /c cd $workDir && go build -o $outputPath $pkg"
 		vendorCmd = "cmd /c cd $workDir && go mod vendor"
 		testCmd = "cmd /c cd $workDir && go test -v $testPkg > $testLogPath"
+		bundleCmd = "cmd /c cd $workDir && npx webpack $srcs -o $workDir/out/js --no-stats && cd $workDir/out/js && (if exist $output.js del $output.js) && rename main.js $output.js && if $obfuscate==true npx javascript-obfuscator $output.js --output $output.js"
 	case "darwin":
 		buildCmd = "cd $workDir && go build -o $outputPath $pkg"
 		vendorCmd = "cd $workDir && go mod vendor"
 		testCmd = "cd $workDir && go test -v $testPkg > $testLogPath"
+		bundleCmd = "cd $workDir" //TODO
 	case "linux":
 		buildCmd = "cd $workDir && go build -o $outputPath $pkg"
 		vendorCmd = "cd $workDir && go mod vendor"
 		testCmd = "cd $workDir && go test -v $testPkg > $testLogPath"
+		bundleCmd = "cd $workDir" //TODO
 	default:
 		panic("not compatible with your operating system")
 	}
@@ -45,8 +50,13 @@ func setOSRulesTestBinary() {
 		Command:     testCmd,
 		Description: "test go pkg $testPkg",
 	}, "workDir", "testLogPath", "testPkg")
+
+	jsBundle = pctx.StaticRule("js_bundle", blueprint.RuleParams{
+		Command:     bundleCmd,
+		Description: "bundle js files $srcs",
+	}, "workDir", "srcs", "output", "obfuscate")
 }
 
-func init()  {
+func init() {
 	setOSRulesTestBinary()
 }

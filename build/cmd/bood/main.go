@@ -20,6 +20,7 @@ var (
 func NewContext() *blueprint.Context {
 	ctx := bood.PrepareContext()
 	ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinFactory)
+	ctx.RegisterModuleType("js_bundler", gomodule.JsBundleFactory)
 	return ctx
 }
 
