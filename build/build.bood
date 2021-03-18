@@ -1,5 +1,5 @@
 go_testedbinary {
-  name: "FinalBood.exe",
+  name: "FinalBood",
   pkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/cmd/bood",
   testPkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule",
   srcs: ["**/*.go", "../go.mod"]

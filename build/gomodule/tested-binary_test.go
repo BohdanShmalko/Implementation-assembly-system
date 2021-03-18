@@ -2,8 +2,10 @@ package gomodule
 
 import (
 	"bytes"
+	"runtime"
 	"strings"
 	"testing"
+	"fmt"
 
 	"github.com/google/blueprint"
 	"github.com/roman-mazur/bood"
@@ -12,10 +14,11 @@ import (
 func Test_TestBinFactory(t *testing.T) {
 	ctx := blueprint.NewContext()
 
+
 	ctx.MockFileSystem(map[string][]byte{
 		"Blueprints": []byte(`
 			go_testedbinary {
-			  name: "smthTestResult.exe",
+			  name: "smthTestResult",
 			  srcs: ["smth.go", "smth_test.go"],
 			  pkg: ".",
 				testPkg: ".",
@@ -45,8 +48,12 @@ func Test_TestBinFactory(t *testing.T) {
 		t.Errorf("WriteBuildFile error : %s", err)
 	} else {
 		ninjaContent := ninjaContentBuffer.String()
-		if !strings.Contains(ninjaContent, "out/bin/smthTestResult.exe:") {
-			t.Errorf("out/bin/smthTestResult.exe does not exist")
+		pcgName := "out/bin/smthTestResult"
+		if runtime.GOOS == "windows" {
+			pcgName += ".exe"
+		}
+		if !strings.Contains(ninjaContent, fmt.Sprintf("%s:", pcgName)) {
+			t.Errorf("out/bin/smthTestResult does not exist")
 		}
 		if !strings.Contains(ninjaContent, "smth.go") {
 			t.Errorf("smth.go does not exist")

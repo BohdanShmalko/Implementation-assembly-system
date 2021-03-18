@@ -6,25 +6,7 @@ import (
 	"github.com/roman-mazur/bood"
 	"path"
 	"regexp"
-)
-
-var (
-	pctx = blueprint.NewPackageContext("github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule")
-
-	goBuild = pctx.StaticRule("binaryBuild", blueprint.RuleParams{
-		Command:     "cmd /c cd $workDir && go build -o $outputPath $pkg",
-		Description: "build go command $pkg",
-	}, "workDir", "outputPath", "pkg")
-
-	goVendor = pctx.StaticRule("vendor", blueprint.RuleParams{
-		Command:     "cmd /c cd $workDir && go mod vendor",
-		Description: "vendor dependencies of $name",
-	}, "workDir", "name")
-
-	goTest = pctx.StaticRule("test", blueprint.RuleParams{
-		Command:     "cmd /c cd $workDir && go test -v $testPkg > $testLogPath",
-		Description: "test go pkg $testPkg",
-	}, "workDir", "testLogPath", "testPkg")
+	"runtime"
 )
 
 type testedBinaryModule struct {
@@ -41,6 +23,9 @@ type testedBinaryModule struct {
 
 func (tb *testedBinaryModule) GenerateBuildActions(ctx blueprint.ModuleContext) {
 	name := ctx.ModuleName()
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
 	config := bood.ExtractConfig(ctx)
 	config.Debug.Printf("Adding build actions for go binary module '%s'", name)
 

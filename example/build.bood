@@ -1,5 +1,5 @@
 go_testedbinary {
-  name: "exampleResult.exe",
+  name: "exampleResult",
   pkg: "github.com/BohdanShmalko/Implementation-assembly-system/example",
   testPkg: "github.com/BohdanShmalko/Implementation-assembly-system/example",
   srcs: ["**/*.go", "../go.mod"]
