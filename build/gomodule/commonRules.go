@@ -24,12 +24,12 @@ func setOSRulesTestBinary() {
 		buildCmd = "cd $workDir && go build -o $outputPath $pkg"
 		vendorCmd = "cd $workDir && go mod vendor"
 		testCmd = "cd $workDir && go test -v $testPkg > $testLogPath"
-		bundleCmd = "cd $workDir" //TODO
+		bundleCmd = "cd $workDir && npx webpack $srcs -o $workDir/out/js --no-stats && cd $workDir/out/js && if [ -f $output.js ]; then rm $output.js; fi && mv main.js $output.js && if $obfuscate; then npx javascript-obfuscator $output.js --output $output.js; fi && cd ../../"
 	case "linux":
 		buildCmd = "cd $workDir && go build -o $outputPath $pkg"
 		vendorCmd = "cd $workDir && go mod vendor"
 		testCmd = "cd $workDir && go test -v $testPkg > $testLogPath"
-		bundleCmd = "cd $workDir" //TODO
+		bundleCmd = "cd $workDir && npx webpack $srcs -o $workDir/out/js --no-stats && cd $workDir/out/js && if [ -f $output.js ]; then rm $output.js; fi && mv main.js $output.js && if $obfuscate; then npx javascript-obfuscator $output.js --output $output.js; fi && cd ../../"
 	default:
 		panic("not compatible with your operating system")
 	}
