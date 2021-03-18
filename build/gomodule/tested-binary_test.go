@@ -2,10 +2,10 @@ package gomodule
 
 import (
 	"bytes"
+	"fmt"
 	"runtime"
 	"strings"
 	"testing"
-	"fmt"
 
 	"github.com/google/blueprint"
 	"github.com/roman-mazur/bood"
@@ -13,7 +13,6 @@ import (
 
 func Test_TestBinFactory(t *testing.T) {
 	ctx := blueprint.NewContext()
-
 
 	ctx.MockFileSystem(map[string][]byte{
 		"Blueprints": []byte(`

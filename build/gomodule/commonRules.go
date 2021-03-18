@@ -14,8 +14,6 @@ var (
 func setOSRulesTestBinary() {
 	var buildCmd, vendorCmd, testCmd, bundleCmd string
 	os := runtime.GOOS
-	//npx webpack ./mainScript.js ./script1.js -o ./out/js && cd ./out/js && rena
-	//me main.js result.js && if "true"=="true" npx javascript-obfuscator result.js --output result.js
 	switch os {
 	case "windows":
 		buildCmd = "cmd /c cd $workDir && go build -o $outputPath $pkg"

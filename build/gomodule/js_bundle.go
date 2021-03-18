@@ -18,20 +18,16 @@ type jsBundleModule struct {
 }
 
 func (tb *jsBundleModule) GenerateBuildActions(ctx blueprint.ModuleContext) {
-	name := ctx.ModuleName()
-	config := bood.ExtractConfig(ctx)
-	config.Debug.Printf("Bundle js files to '%s.js'", "js", name)
-
-	outputPath := path.Join(config.BaseOutputDir, name)
-
-	var srcs string
 	if len(tb.properties.Srcs) > 0 {
+		name := ctx.ModuleName()
+		config := bood.ExtractConfig(ctx)
+		config.Debug.Printf("Bundle js files to '%s.js'", name)
+
+		outputPath := path.Join(config.BaseOutputDir, name)
+		var srcs string
 		for _, file := range tb.properties.Srcs {
 			srcs += fmt.Sprintf(" %s/%s", ctx.ModuleDir(), file)
 		}
-	}
-
-	if len(tb.properties.Srcs) > 0 {
 		ctx.Build(pctx, blueprint.BuildParams{
 			Description: fmt.Sprintf("Bundle js files : %s", tb.properties.Srcs),
 			Rule:        jsBundle,
