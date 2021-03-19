@@ -1,0 +1,29 @@
+name: Bood
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+    
+    - name: download ninjs
+      run: sudo apt install ninja-build
+    
+    - name: Create my bood
+      run: go build ./build/cmd/bood
+
+    - name: test tested-binary
+      run: cd ./build && ../bood
+      
+    - name: download webpack and test js_bundle
+      run: |
+        cd ./example && npm i
+        ../bood
