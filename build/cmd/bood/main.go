@@ -20,11 +20,12 @@ var (
 
 func NewContext() *blueprint.Context {
 	ctx := bood.PrepareContext()
-	ctx.RegisterModuleType("integration_tests", gomodule.IntegrationFactory)
 	if *integrationTests {
+		ctx.RegisterModuleType("integration_tests", gomodule.IntegrationFactory)
 		ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinMockFactory)
 		ctx.RegisterModuleType("js_bundler", gomodule.JsBundleMockFactory)
 	} else {
+		ctx.RegisterModuleType("integration_tests", gomodule.IntegrationMockFactory)
 		ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinFactory)
 		ctx.RegisterModuleType("js_bundler", gomodule.JsBundleFactory)
 	}

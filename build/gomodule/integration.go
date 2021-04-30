@@ -95,7 +95,7 @@ type integrationMockModule struct {
 
 func (tb *integrationMockModule) GenerateBuildActions(ctx blueprint.ModuleContext) {}
 
-func MockFactory() (blueprint.Module, []interface{}) {
+func IntegrationMockFactory() (blueprint.Module, []interface{}) {
 	mType := &integrationMockModule{}
 	return mType, []interface{}{&mType.SimpleName.Properties, &mType.properties}
 }
