@@ -2,25 +2,32 @@ package main
 
 import (
 	"flag"
+	"github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 
-	"github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule"
 	"github.com/google/blueprint"
 	"github.com/roman-mazur/bood"
 )
 
 var (
-	dryRun  = flag.Bool("dry-run", false, "Generate ninja build file but don't start the build")
-	verbose = flag.Bool("v", false, "Display debugging logs")
+	dryRun           = flag.Bool("dry-run", false, "Generate ninja build file but don't start the build")
+	verbose          = flag.Bool("v", false, "Display debugging logs")
+	integrationTests = flag.Bool("integration-tests", false, "select one module to build")
 )
 
 func NewContext() *blueprint.Context {
 	ctx := bood.PrepareContext()
-	ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinFactory)
-	ctx.RegisterModuleType("js_bundler", gomodule.JsBundleFactory)
+	ctx.RegisterModuleType("integration_tests", gomodule.IntegrationFactory)
+	if *integrationTests {
+		ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinMockFactory)
+		ctx.RegisterModuleType("js_bundler", gomodule.JsBundleMockFactory)
+	} else {
+		ctx.RegisterModuleType("go_testedbinary", gomodule.TestBinFactory)
+		ctx.RegisterModuleType("js_bundler", gomodule.JsBundleFactory)
+	}
 	return ctx
 }
 

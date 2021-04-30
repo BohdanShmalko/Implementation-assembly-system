@@ -47,3 +47,22 @@ func JsBundleFactory() (blueprint.Module, []interface{}) {
 	mType := &jsBundleModule{}
 	return mType, []interface{}{&mType.SimpleName.Properties, &mType.properties}
 }
+
+type bundleMockModule struct {
+	blueprint.SimpleName
+
+	properties struct {
+		Pkg         string
+		Srcs        []string
+		SrcsExclude []string
+		TestPkg     string
+		VendorFirst bool
+	}
+}
+
+func (tb *bundleMockModule) GenerateBuildActions(ctx blueprint.ModuleContext) {}
+
+func JsBundleMockFactory() (blueprint.Module, []interface{}) {
+	mType := &bundleMockModule{}
+	return mType, []interface{}{&mType.SimpleName.Properties, &mType.properties}
+}

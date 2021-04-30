@@ -4,3 +4,9 @@ go_testedbinary {
   testPkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule",
   srcs: ["**/*.go", "../go.mod"]
 }
+
+integration_tests {
+  name: "testForIntegration",
+  testPkg: "github.com/BohdanShmalko/Implementation-assembly-system/build/gomodule",
+  srcs: ["**/*.go", "../go.mod"]
+}

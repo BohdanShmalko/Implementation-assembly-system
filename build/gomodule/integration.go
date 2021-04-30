@@ -6,14 +6,12 @@ import (
 	"github.com/roman-mazur/bood"
 	"path"
 	"regexp"
-	"runtime"
 )
 
-type testedBinaryModule struct {
+type integrationModule struct {
 	blueprint.SimpleName
 
 	properties struct {
-		Pkg         string
 		Srcs        []string
 		SrcsExclude []string
 		TestPkg     string
@@ -21,16 +19,10 @@ type testedBinaryModule struct {
 	}
 }
 
-func (tb *testedBinaryModule) GenerateBuildActions(ctx blueprint.ModuleContext) {
+func (tb *integrationModule) GenerateBuildActions(ctx blueprint.ModuleContext) {
 	name := ctx.ModuleName()
-	if runtime.GOOS == "windows" {
-		name += ".exe"
-	}
 	config := bood.ExtractConfig(ctx)
-	config.Debug.Printf("Adding build actions for go binary module '%s'", name)
-
-	outputPath := path.Join(config.BaseOutputDir, "bin", name)
-	testLogPath := path.Join(config.BaseOutputDir, "testLog.txt")
+	testLogPath := path.Join(config.BaseOutputDir, "integrationTestLog.txt")
 
 	var inputs []string
 	var testInputs []string
@@ -83,30 +75,17 @@ func (tb *testedBinaryModule) GenerateBuildActions(ctx blueprint.ModuleContext) 
 			},
 		})
 	}
-
-	ctx.Build(pctx, blueprint.BuildParams{
-		Description: fmt.Sprintf("Build %s as Go binary", name),
-		Rule:        goBuild,
-		Outputs:     []string{outputPath},
-		Implicits:   inputs,
-		Args: map[string]string{
-			"outputPath": outputPath,
-			"workDir":    ctx.ModuleDir(),
-			"pkg":        tb.properties.Pkg,
-		},
-	})
 }
 
-func TestBinFactory() (blueprint.Module, []interface{}) {
-	mType := &testedBinaryModule{}
+func IntegrationFactory() (blueprint.Module, []interface{}) {
+	mType := &integrationModule{}
 	return mType, []interface{}{&mType.SimpleName.Properties, &mType.properties}
 }
 
-type tBinMockModule struct {
+type integrationMockModule struct {
 	blueprint.SimpleName
 
 	properties struct {
-		Pkg         string
 		Srcs        []string
 		SrcsExclude []string
 		TestPkg     string
@@ -114,9 +93,9 @@ type tBinMockModule struct {
 	}
 }
 
-func (tb *tBinMockModule) GenerateBuildActions(ctx blueprint.ModuleContext) {}
+func (tb *integrationMockModule) GenerateBuildActions(ctx blueprint.ModuleContext) {}
 
-func TestBinMockFactory() (blueprint.Module, []interface{}) {
-	mType := &tBinMockModule{}
+func MockFactory() (blueprint.Module, []interface{}) {
+	mType := &integrationMockModule{}
 	return mType, []interface{}{&mType.SimpleName.Properties, &mType.properties}
 }
